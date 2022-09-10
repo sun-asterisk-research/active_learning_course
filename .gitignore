@@ -1,0 +1,8 @@
+data
+checkpoints
+wandb
+__pycache__
+.idea
+.ipynb_checkpoints
+*.pth
+*.pyc
