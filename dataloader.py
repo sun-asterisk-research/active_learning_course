@@ -1,8 +1,8 @@
 import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
-from torchvision import datasets
-from torchvision import transforms
+from torchvision import datasets, transforms
+
 from hyperparams import SEED
 
 
@@ -28,11 +28,15 @@ class MNISTDataLoader:
 
     def get_labeled_data(self):
         labeled_idxs = np.arange(self.n_pool)[self.labeled_idxs]
-        return labeled_idxs, self.dataset(self.X_train[labeled_idxs], self.Y_train[labeled_idxs])
+        return labeled_idxs, self.dataset(
+            self.X_train[labeled_idxs], self.Y_train[labeled_idxs]
+        )
 
     def get_unlabeled_data(self):
         unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
-        return unlabeled_idxs, self.dataset(self.X_train[unlabeled_idxs], self.Y_train[unlabeled_idxs])
+        return unlabeled_idxs, self.dataset(
+            self.X_train[unlabeled_idxs], self.Y_train[unlabeled_idxs]
+        )
 
     def get_train_data(self):
         return self.labeled_idxs.copy(), self.dataset(self.X_train, self.Y_train)
@@ -48,11 +52,13 @@ class MNISTDataset(Dataset):
     def __init__(self, X, Y):
         self.X = X
         self.Y = Y
-        self.transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+        self.transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        )
 
     def __getitem__(self, index):
         x, y = self.X[index], self.Y[index]
-        x = Image.fromarray(x.numpy(), mode='L')
+        x = Image.fromarray(x.numpy(), mode="L")
         x = self.transform(x)
         return x, y, index
 
@@ -61,8 +67,12 @@ class MNISTDataset(Dataset):
 
 
 def get_mnist():
-    raw_train = datasets.MNIST('./data/MNIST', train=True, download=True)
-    raw_test = datasets.MNIST('./data/MNIST', train=False, download=True)
-    return MNISTDataLoader(raw_train.data[:40000], raw_train.targets[:40000], raw_test.data[:40000],
-                      raw_test.targets[:40000],
-                      MNISTDataset)
+    raw_train = datasets.MNIST("./data/MNIST", train=True, download=True)
+    raw_test = datasets.MNIST("./data/MNIST", train=False, download=True)
+    return MNISTDataLoader(
+        raw_train.data[:40000],
+        raw_train.targets[:40000],
+        raw_test.data[:40000],
+        raw_test.targets[:40000],
+        MNISTDataset,
+    )

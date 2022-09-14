@@ -1,26 +1,33 @@
 from dataloader import get_mnist
-from models import MNISTNet, ActiveNet
-from sampling_strategies import MarginSampling, EntropySampling, RandomSampling, LeastConfidenceSampling, RatioSampling
+from hyperparams import BATCH_SIZE, LEARNING_RATE, MOMENTUM, N_EPOCHS, N_WORKERS
+from models import ActiveNet, MNISTNet
+from sampling_strategies import (
+    EntropySampling,
+    LeastConfidenceSampling,
+    MarginSampling,
+    RandomSampling,
+    RatioSampling,
+)
 
 params = {
-    'MNIST': {
-        'n_epoch': 10,
-        'train_args': {'batch_size': 64, 'num_workers': 1},
-        'test_args': {'batch_size': 1000, 'num_workers': 1},
-        'optimizer_args': {'lr': 0.01, 'momentum': 0.5}
+    "MNIST": {
+        "n_epoch": N_EPOCHS,
+        "train_args": {"batch_size": BATCH_SIZE, "num_workers": N_WORKERS},
+        "test_args": {"batch_size": 1024, "num_workers": N_WORKERS},
+        "optimizer_args": {"lr": LEARNING_RATE, "momentum": MOMENTUM},
     }
 }
 
 
 def get_dataset(name):
-    if name == 'MNIST':
+    if name == "MNIST":
         return get_mnist()
     else:
         raise NotImplementedError
 
 
 def get_net(name, device):
-    if name == 'MNIST':
+    if name == "MNIST":
         return ActiveNet(MNISTNet, params[name], device)
     else:
         raise NotImplementedError
