@@ -7,7 +7,8 @@ from sampling_strategies import (
     MarginSampling,
     RandomSampling,
     RatioSampling,
-    BNNSampling
+    BNNSampling,
+    MCDropoutSampling
 )
 
 params = {
@@ -59,5 +60,7 @@ def get_strategy(name):
         return LeastConfidenceSampling
     elif name == "BNNSampling":
         return BNNSampling
+    elif name == "MCDropoutSampling":
+        return MCDropoutSampling
     else:
         raise NotImplementedError

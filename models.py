@@ -55,8 +55,12 @@ class ActiveNet:
                 probs[idxs] = prob.cpu()
         return probs
 
-    def predict_prob_bayesian(self, data, n_infer=10):
+    def predict_prob_bayesian(self, data, n_infer=10, mc_dropout=False):
         self.clf.eval()
+        if mc_dropout:
+            # Use dropout in inference
+            self.clf.train()
+
         probs = torch.zeros([len(data), len(np.unique(data.Y))])
         loader = DataLoader(data, shuffle=False, **self.params["test_args"])
         for _ in range(n_infer):

@@ -26,7 +26,8 @@ strategy_names = [
     # "MarginSampling",
     # "EntropySampling",
     # "RatioSampling",
-    "BNNSampling"
+    # "BNNSampling",
+    "MCDropoutSampling"
 ]
 
 
@@ -89,7 +90,7 @@ for strategy_name in strategy_names:
     dataset = get_dataset(dataset_name)
     # Load network
     torch.manual_seed(SEED)
-    net = get_net("MNISTBayes", device)
+    net = get_net("MNIST", device)
     # Load strategy
     strategy = get_strategy(strategy_name)(dataset, net)
     train_active_learning(dataset, net, strategy)

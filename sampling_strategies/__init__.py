@@ -5,3 +5,4 @@ from .margin_sampling import MarginSampling
 from .random_sampling import RandomSampling
 from .ratio_sampling import RatioSampling
 from .bnn_sampling import BNNSampling
+from .mc_dropout_sampling import MCDropoutSampling
