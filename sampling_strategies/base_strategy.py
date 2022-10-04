@@ -22,3 +22,7 @@ class BaseStrategy:
     def predict_prob(self, data):
         probs = self.net.predict_prob(data)
         return probs
+
+    def predict_prob_bayesian(self, data):
+        probs = self.net.predict_prob_bayesian(data)
+        return probs

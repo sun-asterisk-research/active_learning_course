@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torchbnn as bnn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
@@ -17,7 +18,8 @@ class ActiveNet:
         n_epoch = self.params["n_epoch"]
         self.clf = self.net().to(self.device)
         self.clf.train()
-        optimizer = optim.SGD(self.clf.parameters(), **self.params["optimizer_args"])
+        optimizer = optim.SGD(self.clf.parameters(), **
+                              self.params["optimizer_args"])
 
         loader = DataLoader(data, shuffle=True, **self.params["train_args"])
         for epoch in tqdm(range(1, n_epoch + 1), ncols=100):
@@ -53,6 +55,20 @@ class ActiveNet:
                 probs[idxs] = prob.cpu()
         return probs
 
+    def predict_prob_bayesian(self, data, n_infer=10):
+        self.clf.eval()
+        probs = torch.zeros([len(data), len(np.unique(data.Y))])
+        loader = DataLoader(data, shuffle=False, **self.params["test_args"])
+        for _ in range(n_infer):
+            with torch.no_grad():
+                for x, y, idxs in loader:
+                    x, y = x.to(self.device), y.to(self.device)
+                    out, e1 = self.clf(x)
+                    prob = F.softmax(out, dim=1)
+                    probs[idxs] += prob.cpu()
+        probs /= n_infer
+        return probs
+
 
 class MNISTNet(nn.Module):
     def __init__(self):
@@ -60,6 +76,23 @@ class MNISTNet(nn.Module):
         self.fc1 = nn.Linear(28 * 28, 128)
         self.fc1_drop = nn.Dropout(0.2)
         self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = x.view(-1, 28 * 28)
+        el = F.relu(self.fc1(x))
+        x = self.fc1_drop(el)
+        x = self.fc2(x)
+        return x, el
+
+
+class MNISTBayesianNet(nn.Module):
+    def __init__(self):
+        super(MNISTBayesianNet, self).__init__()
+        self.fc1 = bnn.BayesLinear(
+            prior_mu=0, prior_sigma=0.1, in_features=28 * 28, out_features=128)
+        self.fc1_drop = nn.Dropout(0.2)
+        self.fc2 = bnn.BayesLinear(
+            prior_mu=0, prior_sigma=0.1, in_features=128, out_features=10)
 
     def forward(self, x):
         x = x.view(-1, 28 * 28)

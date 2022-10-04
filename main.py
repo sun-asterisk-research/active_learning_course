@@ -21,11 +21,12 @@ dataset_name = "MNIST"
 
 # Lesson 1
 strategy_names = [
-    "RandomSampling",
-    "LeastConfidenceSampling",
-    "MarginSampling",
-    "EntropySampling",
-    "RatioSampling",
+    # "RandomSampling",
+    # "LeastConfidenceSampling",
+    # "MarginSampling",
+    # "EntropySampling",
+    # "RatioSampling",
+    "BNNSampling"
 ]
 
 
@@ -88,7 +89,7 @@ for strategy_name in strategy_names:
     dataset = get_dataset(dataset_name)
     # Load network
     torch.manual_seed(SEED)
-    net = get_net(dataset_name, device)
+    net = get_net("MNISTBayes", device)
     # Load strategy
     strategy = get_strategy(strategy_name)(dataset, net)
     train_active_learning(dataset, net, strategy)

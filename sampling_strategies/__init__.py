@@ -4,3 +4,4 @@ from .least_confidence_sampling import LeastConfidenceSampling
 from .margin_sampling import MarginSampling
 from .random_sampling import RandomSampling
 from .ratio_sampling import RatioSampling
+from .bnn_sampling import BNNSampling
