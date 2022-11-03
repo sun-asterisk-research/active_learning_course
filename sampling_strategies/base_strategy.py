@@ -26,3 +26,7 @@ class BaseStrategy:
     def predict_prob_bayesian(self, data, mc_dropout=False):
         probs = self.net.predict_prob_bayesian(data, mc_dropout=mc_dropout)
         return probs
+
+    def predict_prob_bayesian_split(self, data):
+        probs = self.net.predict_prob_bayesian_split(data)
+        return probs

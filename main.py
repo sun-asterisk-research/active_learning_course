@@ -27,7 +27,8 @@ strategy_names = [
     # "EntropySampling",
     # "RatioSampling",
     # "BNNSampling",
-    "MCDropoutSampling"
+    # "MCDropoutSampling",
+    "BALDSampling",
 ]
 
 

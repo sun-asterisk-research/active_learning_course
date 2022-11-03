@@ -1,14 +1,15 @@
 from dataloader import get_mnist
 from hyperparams import BATCH_SIZE, LEARNING_RATE, MOMENTUM, N_EPOCHS, N_WORKERS
-from models import ActiveNet, MNISTNet, MNISTBayesianNet
+from models import ActiveNet, MNISTBayesianNet, MNISTNet
 from sampling_strategies import (
+    BALDSampling,
+    BNNSampling,
     EntropySampling,
     LeastConfidenceSampling,
     MarginSampling,
+    MCDropoutSampling,
     RandomSampling,
     RatioSampling,
-    BNNSampling,
-    MCDropoutSampling
 )
 
 params = {
@@ -23,7 +24,7 @@ params = {
         "train_args": {"batch_size": BATCH_SIZE, "num_workers": N_WORKERS},
         "test_args": {"batch_size": 1024, "num_workers": N_WORKERS},
         "optimizer_args": {"lr": LEARNING_RATE, "momentum": MOMENTUM},
-    }
+    },
 }
 
 
@@ -37,7 +38,7 @@ def get_dataset(name):
 def get_net(name, device):
     if name == "MNIST":
         return ActiveNet(MNISTNet, params[name], device)
-    elif name == 'MNISTBayes':
+    elif name == "MNISTBayes":
         return ActiveNet(MNISTBayesianNet, params[name], device)
     else:
         raise NotImplementedError
@@ -62,5 +63,7 @@ def get_strategy(name):
         return BNNSampling
     elif name == "MCDropoutSampling":
         return MCDropoutSampling
+    elif name == "BALDSampling":
+        return BALDSampling
     else:
         raise NotImplementedError
