@@ -28,7 +28,8 @@ strategy_names = [
     # "RatioSampling",
     # "BNNSampling",
     # "MCDropoutSampling",
-    "BALDSampling",
+    # "BALDSampling",
+    "KCentersGreedySampling"
 ]
 
 

@@ -30,3 +30,7 @@ class BaseStrategy:
     def predict_prob_bayesian_split(self, data):
         probs = self.net.predict_prob_bayesian_split(data)
         return probs
+
+    def get_embeddings(self, data):
+        embeddings = self.net.get_embeddings(data)
+        return embeddings

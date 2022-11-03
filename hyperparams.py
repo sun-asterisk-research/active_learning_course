@@ -12,5 +12,5 @@ MOMENTUM = 0.5
 N_WORKERS = 4
 # For WanDB
 WANDB_PROJECT = "Active Learning Course"
-WANDB_KEY = "local-4a2a3cc334037b92502bbd3ff1f53806dcb52564"
-WANDB_HOST = "http://127.0.0.1:8081/"
+WANDB_KEY = "f9417e07dcb47e40d732334c9390cb2929834f96"
+WANDB_HOST = "https://api.wandb.ai"

@@ -5,6 +5,7 @@ from sampling_strategies import (
     BALDSampling,
     BNNSampling,
     EntropySampling,
+    KCentersGreedySampling,
     LeastConfidenceSampling,
     MarginSampling,
     MCDropoutSampling,
@@ -65,5 +66,7 @@ def get_strategy(name):
         return MCDropoutSampling
     elif name == "BALDSampling":
         return BALDSampling
+    elif name == "KCentersGreedySampling":
+        return KCentersGreedySampling
     else:
         raise NotImplementedError

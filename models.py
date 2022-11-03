@@ -86,6 +86,17 @@ class ActiveNet:
                     probs[i][idxs] += prob.cpu().data
         return probs
 
+    def get_embeddings(self, data):
+        self.clf.eval()
+        embeddings = torch.zeros([len(data), self.clf.get_embedding_dim()])
+        loader = DataLoader(data, shuffle=False, **self.params["test_args"])
+        with torch.no_grad():
+            for x, y, idxs in loader:
+                x, y = x.to(self.device), y.to(self.device)
+                out, e1 = self.clf(x)
+                embeddings[idxs] = e1.cpu()
+        return embeddings
+
 
 class MNISTNet(nn.Module):
     def __init__(self):
@@ -100,6 +111,9 @@ class MNISTNet(nn.Module):
         x = self.fc1_drop(el)
         x = self.fc2(x)
         return x, el
+
+    def get_embedding_dim(self):
+        return 128
 
 
 class MNISTBayesianNet(nn.Module):
